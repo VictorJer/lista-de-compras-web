@@ -3,44 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    @* Importação do CSS do Bootstrap *@
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-
+    <meta name="description" content="Organize suas compras de forma simples e prática.">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true">
     <title>@ViewBag.Titulo - Lista de Compras</title>
 </head>
 <body>
-    @* Barra de Navegação *@
-    <nav class="navbar navbar-expand-lg bg-white border-bottom">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container">
-            <a class="navbar-brand fw-semibold" asp-controller="Home" asp-action="Index">Lista de Compras</a>
-
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuPrincipal" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <a class="navbar-brand d-flex align-items-center gap-2 fw-bold" asp-controller="Home" asp-action="Index">
+                <span class="brand-icon"><i class="bi bi-basket2-fill"></i></span>
+                Lista de Compras
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuPrincipal" aria-controls="menuPrincipal" aria-expanded="false" aria-label="Abrir menu">
                 <span class="navbar-toggler-icon"></span>
             </button>
-
             <div class="collapse navbar-collapse" id="menuPrincipal">
-                <div class="navbar-nav ms-auto">
-                    <a class="nav-link" asp-controller="Home" asp-action="Index">Início</a>
-                    <a class="nav-link" asp-controller="Categoria" asp-action="Listar">Controle de Categorias</a>
-                    <a class="nav-link" asp-controller="Produto" asp-action="Listar">Controle de Produtos</a>
-                    <a class="nav-link" asp-controller="ListaCompras" asp-action="Listar">Controle de Listas de Compras</a>
+                <div class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
+                    <a class="nav-link" asp-controller="Home" asp-action="Index"><i class="bi bi-house me-1"></i>Início</a>
+                    <a class="nav-link" asp-controller="Categoria" asp-action="Index"><i class="bi bi-tags me-1"></i>Categorias</a>
+                    <a class="nav-link" asp-controller="Produto" asp-action="Index"><i class="bi bi-box-seam me-1"></i>Produtos</a>
+                    <a class="nav-link" asp-controller="ListaCompras" asp-action="Index"><i class="bi bi-list-check me-1"></i>Minhas listas</a>
                 </div>
             </div>
         </div>
     </nav>
 
-    @* Cabeçalho da Página *@
-    <header class="container py-4">
-        <h2>@ViewBag.Titulo</h2>
+    <header class="page-header bg-white border-bottom">
+        <div class="container py-4">
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+                <div>
+                    <p class="text-primary text-uppercase fw-semibold small mb-1">Painel de controle</p>
+                    <h1 class="h3 fw-bold mb-1">@ViewBag.Titulo</h1>
+                    <p class="text-body-secondary mb-0">Organize suas compras de forma simples e prática.</p>
+                </div>
+                <a class="btn btn-primary" asp-controller="ListaCompras" asp-action="Index"><i class="bi bi-plus-lg me-2"></i>Nova lista</a>
+            </div>
+        </div>
     </header>
 
-    @* Conteúdo da Página *@
-    <main class="container pb-5">
+    <main class="container py-4 py-lg-5">
         @RenderBody()
     </main>
 
-    @* Importação do JavaScript do Bootstrap *@
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <footer class="bg-white border-top mt-auto">
+        <div class="container d-flex flex-column flex-sm-row justify-content-between gap-2 py-4 text-body-secondary small">
+            <span><i class="bi bi-basket2 me-1"></i>Lista de Compras</span>
+            <span>Organize. Planeje. Compre melhor.</span>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

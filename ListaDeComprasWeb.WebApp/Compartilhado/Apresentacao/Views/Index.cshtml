@@ -1,42 +1,46 @@
 @{
     Layout = "_Layout";
-    ViewBag.Titulo = "Página Inicial";
+    ViewBag.Titulo = "Página inicial";
 }
 
-<div class="row g-2">
+<div class="row g-4">
     <div class="col-lg-7">
-        <h1 class="display-5 fw-semibold mb-3">Lista de Compras</h1>
-        <p class="lead text-secondary mb-4">
-            Planeje suas compras diárias e do mês, incluindo categorias, produtos, listas e itens.
-        </p>
-
-        <div class="d-flex flex-wrap gap-2">
-            <a class="btn btn-primary rounded-pill px-4" asp-controller="Categoria" asp-action="Listar">Categorias</a>
-            <a class="btn btn-primary rounded-pill px-4" asp-controller="Produto" asp-action="Listar">Produtos</a>
-            <a class="btn btn-primary rounded-pill px-4" asp-controller="ListaCompras" asp-action="Listar">Listas de Compras</a>
+        <div class="card border-0 bg-primary text-white h-100 overflow-hidden">
+            <div class="card-body p-4 p-lg-5">
+                <span class="badge rounded-pill bg-white text-primary mb-4">Comece agora</span>
+                <h2 class="display-6 fw-bold">Sua próxima compra começa aqui.</h2>
+                <p class="lead opacity-75 mt-3 mb-4">
+                    Crie uma lista, adicione os produtos que precisa e vá às compras sem esquecer de nada.
+                </p>
+                <a class="btn btn-light btn-lg text-primary fw-semibold" asp-controller="ListaCompras" asp-action="Index">
+                    <i class="bi bi-plus-lg me-2"></i>Criar lista de compras
+                </a>
+            </div>
         </div>
-
     </div>
 
     <div class="col-lg-5">
-        <div class="card border-primary-subtle shadow-sm">
-            <div class="card-body p-4">
-                <h3 class="h5 text-primary mb-3">Módulos disponíveis</h3>
-
-                <div class="list-group">
-                    <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" asp-controller="Categoria" asp-action="Listar">
-                        Controle de Categorias
-                        <span class="badge text-bg-primary rounded-pill">Abrir</span>
-                    </a>
-                    <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" asp-controller="Produto" asp-action="Listar">
-                        Controle de Produtos
-                        <span class="badge text-bg-primary rounded-pill">Abrir</span>
-                    </a>
-                    <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" asp-controller="ListaCompras" asp-action="Listar">
-                        Controle de Listas de Compras
-                        <span class="badge text-bg-primary rounded-pill">Abrir</span>
-                    </a>
-                </div>
+        <div class="card h-100">
+            <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+                <h2 class="h5 fw-bold mb-0">Acesso rápido</h2>
+                <i class="bi bi-arrow-up-right text-primary"></i>
+            </div>
+            <div class="list-group list-group-flush">
+                <a class="list-group-item list-group-item-action d-flex align-items-center gap-3 py-3" asp-controller="Categoria" asp-action="Index">
+                    <span class="quick-icon bg-warning-subtle text-warning"><i class="bi bi-tags"></i></span>
+                    <span><strong class="d-block">Categorias</strong><small class="text-body-secondary">Separe seus produtos</small></span>
+                    <i class="bi bi-chevron-right ms-auto text-body-secondary"></i>
+                </a>
+                <a class="list-group-item list-group-item-action d-flex align-items-center gap-3 py-3" asp-controller="Produto" asp-action="Index">
+                    <span class="quick-icon bg-success-subtle text-success"><i class="bi bi-box-seam"></i></span>
+                    <span><strong class="d-block">Produtos</strong><small class="text-body-secondary">Mantenha seu catálogo</small></span>
+                    <i class="bi bi-chevron-right ms-auto text-body-secondary"></i>
+                </a>
+                <a class="list-group-item list-group-item-action d-flex align-items-center gap-3 py-3" asp-controller="ListaCompras" asp-action="Index">
+                    <span class="quick-icon bg-primary-subtle text-primary"><i class="bi bi-list-check"></i></span>
+                    <span><strong class="d-block">Listas de compras</strong><small class="text-body-secondary">Planeje sua próxima ida</small></span>
+                    <i class="bi bi-chevron-right ms-auto text-body-secondary"></i>
+                </a>
             </div>
         </div>
     </div>
