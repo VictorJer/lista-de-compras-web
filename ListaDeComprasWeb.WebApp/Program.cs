@@ -1,6 +1,6 @@
-using ClubeDaLeituraWeb.WebApp.Compartilhado.Infra;
 using ListaDeComprasWeb.WebApp.Compartilhado.Aplicacao;
 using ListaDeComprasWeb.WebApp.Compartilhado.Apresentacao;
+using ListaDeComprasWeb.WebApp.Compartilhado.Infra;
 
 var builder = WebApplication.CreateBuilder(args);
 

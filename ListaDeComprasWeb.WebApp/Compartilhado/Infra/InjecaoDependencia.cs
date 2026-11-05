@@ -1,6 +1,8 @@
 using ListaDeComprasWeb.WebApp.Compartilhado.Infra.Arquivos;
+using ListaDeComprasWeb.WebApp.Modulos.ModuloCategoria.Dominio;
+using ListaDeComprasWeb.WebApp.Modulos.ModuloProduto.Dominio;
 
-namespace ClubeDaLeituraWeb.WebApp.Compartilhado.Infra;
+namespace ListaDeComprasWeb.WebApp.Compartilhado.Infra;
 
 public static class InjecaoDependencia
 {
@@ -14,5 +16,9 @@ public static class InjecaoDependencia
 
             return contextoJson;
         });
+
+        services.AddScoped<IRepositorioCategoria, RepositorioCategoriaEmArquivo>();
+        services.AddScoped<IRepositorioProduto, RepositorioProdutoEmArquivo>();
+
     }
 }
