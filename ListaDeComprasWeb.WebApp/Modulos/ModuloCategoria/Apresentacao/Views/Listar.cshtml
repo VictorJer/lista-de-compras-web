@@ -1,0 +1,58 @@
+@model List<ListaDeComprasWeb.WebApp.ModuloCategoria.Apresentacao.ListarCategoriasViewModel>
+
+@{
+    Layout = "_Layout";
+    ViewBag.Titulo = "Categorias";
+}
+
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+    <div>
+        <h2 class="h4 fw-bold mb-1">Categorias cadastradas</h2>
+        <p class="text-body-secondary mb-0">Organize seus produtos por grupos.</p>
+    </div>
+    <span class="badge rounded-pill text-bg-primary align-self-start align-self-md-center">
+        @Model.Count categoria(s)
+    </span>
+</div>
+
+<div class="card">
+    @if (Model.Count == 0)
+    {
+        <div class="card-body text-center py-5">
+            <i class="bi bi-tags display-5 text-body-secondary"></i>
+            <h3 class="h5 mt-3">Nenhuma categoria cadastrada</h3>
+            <p class="text-body-secondary mb-0">As categorias cadastradas aparecerão nesta lista.</p>
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th scope="col">Nome</th>
+                        <th scope="col">Cor</th>
+                        <th scope="col">Identificador</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var categoria in Model)
+                    {
+                        <tr>
+                            <td class="fw-semibold">@categoria.Nome</td>
+                            <td>
+                                <span class="d-inline-flex align-items-center gap-2">
+                                    <span class="rounded-circle border color-preview" style="background-color: @categoria.Cor;" aria-hidden="true"></span>
+                                    <span>@categoria.Cor</span>
+                                </span>
+                            </td>
+                            <td>
+                                <code>@categoria.Id</code>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

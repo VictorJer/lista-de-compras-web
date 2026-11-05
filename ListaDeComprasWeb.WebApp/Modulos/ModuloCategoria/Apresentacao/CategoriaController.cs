@@ -5,8 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 
 public class CategoriaController(ServicoCategoria servicoCategoria, IMapper maper) : Controller
 {
+
     [HttpGet]
-    public IActionResult Index()
+    public IActionResult Listar()
     {
         var dto = servicoCategoria.SelecionarTodos();
         var vm = maper.Map<List<ListarCategoriasViewModel>>(dto);
