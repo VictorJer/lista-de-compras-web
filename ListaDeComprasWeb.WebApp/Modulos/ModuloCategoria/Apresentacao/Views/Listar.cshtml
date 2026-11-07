@@ -10,9 +10,14 @@
         <h2 class="h4 fw-bold mb-1">Categorias cadastradas</h2>
         <p class="text-body-secondary mb-0">Organize seus produtos por grupos.</p>
     </div>
-    <span class="badge rounded-pill text-bg-primary align-self-start align-self-md-center">
-        @Model.Count categoria(s)
-    </span>
+    <div class="d-flex align-items-center gap-3">
+        <span class="badge rounded-pill text-bg-primary">
+            @Model.Count categoria(s)
+        </span>
+        <a class="btn btn-primary" asp-action="Cadastrar">
+            <i class="bi bi-plus-lg me-2"></i>Nova categoria
+        </a>
+    </div>
 </div>
 
 <div class="card">
@@ -33,6 +38,7 @@
                         <th scope="col">Nome</th>
                         <th scope="col">Cor</th>
                         <th scope="col">Identificador</th>
+                        <th scope="col" class="text-end">Ações</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -48,6 +54,16 @@
                             </td>
                             <td>
                                 <code>@categoria.Id</code>
+                            </td>
+                            <td class="text-end">
+                                <div class="btn-group" role="group" aria-label="Ações da categoria @categoria.Nome">
+                                    <a class="btn btn-sm btn-outline-primary" asp-action="Editar" asp-route-id="@categoria.Id">
+                                        <i class="bi bi-pencil me-1"></i>Editar
+                                    </a>
+                                    <a class="btn btn-sm btn-outline-danger" asp-action="Excluir" asp-route-id="@categoria.Id">
+                                        <i class="bi bi-trash me-1"></i>Excluir
+                                    </a>
+                                </div>
                             </td>
                         </tr>
                     }

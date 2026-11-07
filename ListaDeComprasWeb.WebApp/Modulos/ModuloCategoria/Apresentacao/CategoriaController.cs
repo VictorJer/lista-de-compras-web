@@ -31,10 +31,10 @@ public class CategoriaController(ServicoCategoria servicoCategoria, IMapper mape
             return View(vm);
 
         var dto = maper.Map<CadastrarCategoriaDto>(vm);
-         
+
         var resultado = servicoCategoria.Cadastrar(dto);
 
-        if (!resultado.IsFailed)
+        if (resultado.IsFailed)
         {
             ModelState.AddModelError(resultado);
 
@@ -44,4 +44,67 @@ public class CategoriaController(ServicoCategoria servicoCategoria, IMapper mape
         return RedirectToAction(nameof(Listar));
     }
     
+    [HttpGet]
+    public ActionResult Editar(Guid id)
+    {
+        var resultado = servicoCategoria.SelecionarPorId(id);
+
+        if (resultado.IsFailed)
+            return NotFound(resultado.Errors.First().Message);
+
+        var vm = maper.Map<EditarCategoriaViewModel>(resultado.Value);
+
+        return View(vm);
+    }
+
+    [HttpPost]
+    public ActionResult Editar(EditarCategoriaViewModel vm)
+    {
+        if (!ModelState.IsValid)
+            return View(vm);
+
+        var dto = maper.Map<EditarCategoriaDto>(vm);
+
+        var resultado = servicoCategoria.Editar(dto);
+
+        if (resultado.IsFailed)
+        {
+            ModelState.AddModelError(resultado);
+
+            return View(vm);
+        }
+
+        return RedirectToAction(nameof(Listar));
+    }
+
+    [HttpGet]
+    public ActionResult Excluir(Guid id)
+    {
+        var resultado = servicoCategoria.SelecionarPorId(id);
+
+        if (resultado.IsFailed)
+            return NotFound(resultado.Errors.First().Message);
+
+        var vm = maper.Map<ExcluirCategoriaViewModel>(resultado.Value);
+
+        return View(vm);
+    }
+
+    [HttpPost]
+    public ActionResult Excluir(ExcluirCategoriaViewModel vm)
+    {
+        if (!ModelState.IsValid)
+            return View(vm);
+
+        var resultado = servicoCategoria.Excluir(vm.Id);
+
+        if (resultado.IsFailed)
+        {
+            ModelState.AddModelError(resultado);
+
+            return View(vm);
+        }
+
+        return RedirectToAction(nameof(Listar));
+    }
 }

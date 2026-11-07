@@ -33,3 +33,9 @@ public record ExcluirCategoriaViewModel(
     string Nome,
     string Cor
 );
+
+public record DetalhesCategoriaViewModel(
+    Guid Id,
+    string Nome,
+    string Cor
+);
