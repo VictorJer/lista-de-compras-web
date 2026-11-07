@@ -1,10 +1,14 @@
+using System.Text.Json.Serialization;
 using ListaDeComprasWeb.WebApp.Compartilhado.Dominio;
 
 namespace ListaDeComprasWeb.WebApp.Modulos.ModuloCategoria.Dominio;
 
 public sealed class Categoria : EntidadeBase<Categoria>
 {
+    [JsonInclude]
     public string Nome { get; private set; } = string.Empty;
+
+    [JsonInclude]
     public string Cor { get; private set; } = string.Empty;
 
     public Categoria() {  }
