@@ -108,6 +108,24 @@ public class ServicoProduto
             )).ToList();
     }
 
+    public Result<DetalhesProdutoDto> SelecionarPorId(Guid id)
+    {
+        var produto = repositorioProduto.SelecionarPorId(id);
+
+        if (produto is null)
+            return Result.Fail("Produto não encontrado.");
+
+        return Result.Ok(new DetalhesProdutoDto(
+            produto.Id,
+            produto.Nome,
+            produto.Categoria.Id,
+            produto.Categoria.Nome,
+            produto.Categoria.Cor,
+            produto.UnidadeMedida,
+            produto.PrecoAproximado
+        ));
+    }
+
     private bool ExisteProdutoComMesmoNome(string nome, Guid? idIgnorado = null)
     {
         return repositorioProduto
