@@ -40,14 +40,14 @@ public class ProdutoController(ServicoProduto servicoProduto, IMapper mapper) : 
         CadastrarProdutoDto dto = mapper.Map<CadastrarProdutoDto>(vm);
         var result = servicoProduto.Cadastrar(dto);
 
-        if (!result.IsFailed)
+        if (result.IsFailed)
         {
             ModelState.AddModelError(result);
 
             return View(vm with { Categorias = SelecionarCategorias() });
         }
 
-        return RedirectToAction("Listar");
+        return RedirectToAction(nameof(Listar));
     }
 
     [HttpGet]
@@ -67,6 +67,24 @@ public class ProdutoController(ServicoProduto servicoProduto, IMapper mapper) : 
         return View(vm);
     }
 
+    [HttpPost]
+    public ActionResult Editar(EditarProdutoViewModel vm)
+    {
+        if (!ModelState.IsValid)
+            return View(vm with { Categorias = SelecionarCategorias() });
+
+        EditarProdutoDto dto = mapper.Map<EditarProdutoDto>(vm);
+
+        var result = servicoProduto.Editar(dto);
+
+        if (result.IsFailed)
+        {
+            TempData.AddErrorMessage(result);
+            return View(vm with { Categorias = SelecionarCategorias() });
+        }
+
+        return RedirectToAction(nameof(Listar));
+    }
 
     private List<OpcaoCategoriaViewModel> SelecionarCategorias()
     {
