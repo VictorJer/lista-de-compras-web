@@ -77,6 +77,37 @@ public class ServicoProduto
         return Result.Ok();
     }
 
+    public Result Excluir(Guid id)
+    {
+        var produtoExistente = repositorioProduto.SelecionarPorId(id);
+
+        if (produtoExistente is null)
+            return Result.Fail("Produto não encontrado.");
+
+        bool conseguiuExcluir = repositorioProduto.Excluir(id);
+
+        if (!conseguiuExcluir)
+            return Result.Fail("Produto não encontrado.");
+
+        return Result.Ok();
+    }
+
+    public List<ListarProdutosDto> SelecionarTodos()
+    {
+
+        return repositorioProduto
+            .SelecionarTodos()
+            .Select(p => new ListarProdutosDto(
+                p.Id,
+                p.Nome,
+                p.Categoria.Id,
+                p.Categoria.Nome,
+                p.Categoria.Cor,
+                p.UnidadeMedida,
+                p.PrecoAproximado
+            )).ToList();
+    }
+
     private bool ExisteProdutoComMesmoNome(string nome, Guid? idIgnorado = null)
     {
         return repositorioProduto
