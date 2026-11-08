@@ -11,7 +11,8 @@ public class ProdutoProfile : Profile
         CreateMap<ListarProdutosDto, ListarProdutosViewModel>();
         CreateMap<CadastrarProdutoViewModel, CadastrarProdutoDto>();
         CreateMap<EditarProdutoViewModel, EditarProdutoDto>();
-        CreateMap<DetalhesProdutoDto, EditarProdutoViewModel>();
+        CreateMap<DetalhesProdutoDto, EditarProdutoViewModel>()
+            .ForCtorParam("Categorias", opt => opt.MapFrom(_ => new List<OpcaoCategoriaViewModel>()));
         CreateMap<DetalhesProdutoDto, ExcluirProdutoViewModel>();
     }
 }
