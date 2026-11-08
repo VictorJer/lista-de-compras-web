@@ -32,6 +32,11 @@ public class ServicoProduto
             dto.PrecoAproximado
         );
 
+        Result resultadoValidacao = ValidarEntidade(produto);
+
+        if (!resultadoValidacao.IsSuccess)
+            return resultadoValidacao;
+
         repositorioProduto.Cadastrar(produto);
 
         return Result.Ok();
@@ -41,6 +46,16 @@ public class ServicoProduto
     {
         return false;
     }
+
+    private static Result ValidarEntidade(Produto produto)
+    {
+        List<string> erros = produto.Validar();
+
+        if (erros.Count == 0)
+            return Result.Ok();
+
+        return Result.Fail(new Error(erros.First()).WithMetadata("Campo", string.Empty));
+    }    
 
     private static Result Falha(string campo, string mensagem)
     {
