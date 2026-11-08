@@ -22,7 +22,7 @@ public class ServicoProduto
         if (categoria is null)
             return Falha(nameof(dto.CategotriaId), "Categoria não encontrada.");
         
-        if (ExisteProdutoComMesmoNome())
+        if (ExisteProdutoComMesmoNome(dto.Nome))
             return Falha(nameof(dto.Nome), "Já existe um produto com este nome.");
 
         var produto = new Produto(
@@ -42,9 +42,48 @@ public class ServicoProduto
         return Result.Ok();
     }
 
-    private static bool ExisteProdutoComMesmoNome()
+    public Result Editar(EditarProdutoDto dto)
     {
-        return false;
+        var produtoExistente = repositorioProduto.SelecionarPorId(dto.Id);
+
+        if (produtoExistente is null)
+            return Result.Fail("Produto não encontrado.");
+
+        var categoria = repositorioCategoria.SelecionarPorId(dto.CategotriaId);
+
+        if (categoria is null)
+            return Falha(nameof(dto.CategotriaId), "Categoria não encontrada.");
+
+        if (ExisteProdutoComMesmoNome(dto.Nome, dto.Id))
+            return Falha(nameof(dto.Nome), "Já existe um produto com este nome.");
+
+        var produtoAtualizado = new Produto(
+            dto.Nome,
+            categoria,
+            dto.UnidadeMedida,
+            dto.PrecoAproximado
+        );
+
+        Result resultadoValidacao = ValidarEntidade(produtoAtualizado);
+
+        if (!resultadoValidacao.IsSuccess)
+            return resultadoValidacao;
+
+        bool conseguiuEditar = repositorioProduto.Editar(dto.Id, produtoAtualizado);
+
+        if (!conseguiuEditar)
+            return Result.Fail("Produto não encontrado.");
+
+        return Result.Ok();
+    }
+
+    private bool ExisteProdutoComMesmoNome(string nome, Guid? idIgnorado = null)
+    {
+        return repositorioProduto
+            .SelecionarTodos()
+            .Any(p => p.Id != idIgnorado &&
+                string.Equals(p.Nome, nome, StringComparison.OrdinalIgnoreCase));
+
     }
 
     private static Result ValidarEntidade(Produto produto)
