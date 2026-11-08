@@ -36,3 +36,9 @@ public record DetalhesProdutoDto(
     UnidadeMedida UnidadeMedida,
     decimal PrecoAproximado
 );
+
+public record OpcaoCategoriaDto(
+    Guid Id,
+    string Nome,
+    string Cor
+);

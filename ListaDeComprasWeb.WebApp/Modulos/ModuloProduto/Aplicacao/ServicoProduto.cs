@@ -149,4 +149,12 @@ public class ServicoProduto
     {
         return Result.Fail(new Error(mensagem).WithMetadata("Campo", campo));
     }
+
+    public List<OpcaoCategoriaDto> SelecionarCategorias()
+    {
+        return repositorioCategoria
+            .SelecionarTodos()
+            .Select(c => new OpcaoCategoriaDto(c.Id, c.Nome, c.Cor))
+            .ToList();
+    }
 }
