@@ -91,16 +91,23 @@ public class CategoriaController(ServicoCategoria servicoCategoria, IMapper mape
     }
 
     [HttpPost]
-    public ActionResult Excluir(ExcluirCategoriaViewModel vm)
+    public ActionResult Excluir(Guid? id)
     {
-        if (!ModelState.IsValid)
-            return View(vm);
+        if (!id.HasValue)
+            return BadRequest("O identificador da categoria é obrigatório.");
 
-        var resultado = servicoCategoria.Excluir(vm.Id);
+        var resultado = servicoCategoria.Excluir(id.Value);
 
         if (resultado.IsFailed)
         {
             ModelState.AddModelError(resultado);
+
+            var detalhes = servicoCategoria.SelecionarPorId(id.Value);
+
+            if (detalhes.IsFailed)
+                return NotFound(detalhes.Errors.First().Message);
+
+            var vm = maper.Map<ExcluirCategoriaViewModel>(detalhes.Value);
 
             return View(vm);
         }
