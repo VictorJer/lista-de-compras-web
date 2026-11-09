@@ -1,0 +1,45 @@
+@model ExcluirProdutoViewModel
+
+@{
+    Layout = "_Layout";
+    ViewBag.Titulo = "Excluir produto";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-7">
+        <div class="card border-danger">
+            <div class="card-header bg-danger text-white py-3">
+                <h2 class="h5 fw-bold mb-0"><i class="bi bi-exclamation-triangle me-2"></i>Excluir produto</h2>
+            </div>
+
+            <div class="card-body p-4">
+                <p>Tem certeza de que deseja excluir o produto <strong>@Model.Nome</strong>?</p>
+                <p class="text-body-secondary">Esta ação não poderá ser desfeita.</p>
+
+                <dl class="row mb-4">
+                    <dt class="col-sm-4">Nome</dt>
+                    <dd class="col-sm-8">@Model.Nome</dd>
+                    <dt class="col-sm-4">Categoria</dt>
+                    <dd class="col-sm-8">
+                        <span class="d-inline-flex align-items-center gap-2">
+                            <span class="rounded-circle border color-preview" style="background-color: @Model.CategoriaCor;" aria-hidden="true"></span>
+                            @Model.CategoriaNome
+                        </span>
+                    </dd>
+                    <dt class="col-sm-4">Unidade de medida</dt>
+                    <dd class="col-sm-8">@Model.UnidadeMedida</dd>
+                    <dt class="col-sm-4">Preço aproximado</dt>
+                    <dd class="col-sm-8">@Model.PrecoAproximado.ToString("C", System.Globalization.CultureInfo.GetCultureInfo("pt-BR"))</dd>
+                </dl>
+
+                <form asp-action="Excluir" method="post" class="d-flex justify-content-end gap-2">
+                    <input asp-for="Id" type="hidden" />
+                    <a class="btn btn-outline-secondary" asp-action="Listar">Cancelar</a>
+                    <button type="submit" class="btn btn-danger">
+                        <i class="bi bi-trash me-2"></i>Excluir produto
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
