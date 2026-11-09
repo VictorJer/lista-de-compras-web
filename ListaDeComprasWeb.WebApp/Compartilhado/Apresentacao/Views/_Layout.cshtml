@@ -22,6 +22,7 @@
             <div class="collapse navbar-collapse" id="menuPrincipal">
                 <div class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
                     <a class="nav-link" asp-controller="Home" asp-action="Index"><i class="bi bi-house me-1"></i>Início</a>
+                    <a class="nav-link" asp-controller="Produto" asp-action="Listar"><i class="bi bi-basket2 me-1"></i>Produtos</a>
                     <a class="nav-link" asp-controller="Categoria" asp-action="Listar"><i class="bi bi-tags me-1"></i>Categorias</a>
                 </div>
             </div>
@@ -36,7 +37,10 @@
                     <h1 class="h3 fw-bold mb-1">@ViewBag.Titulo</h1>
                     <p class="text-body-secondary mb-0">Organize suas compras de forma simples e prática.</p>
                 </div>
-                <a class="btn btn-primary" asp-controller="Categoria" asp-action="Listar"><i class="bi bi-tags me-2"></i>Ver categorias</a>
+                @if (ViewContext.RouteData.Values["controller"]?.ToString() != "Produto")
+                {
+                    <a class="btn btn-primary" asp-controller="Categoria" asp-action="Listar"><i class="bi bi-tags me-2"></i>Ver categorias</a>
+                }
             </div>
         </div>
     </header>
