@@ -79,7 +79,7 @@ public class ProdutoController(ServicoProduto servicoProduto, IMapper mapper) : 
 
         if (result.IsFailed)
         {
-            TempData.AddErrorMessage(result);
+            ModelState.AddModelError(result);
             return View(vm with { Categorias = SelecionarCategorias() });
         }
 
