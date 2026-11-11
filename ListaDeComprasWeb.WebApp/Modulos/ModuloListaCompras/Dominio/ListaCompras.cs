@@ -8,13 +8,29 @@ public sealed class ListaCompras : EntidadeBase<ListaCompras>
     public DateTime DataCriacao { get; set; } = DateTime.Now;
     public StatusListaCompras Status { get; set; } = StatusListaCompras.Aberta;
 
+    public ListaCompras() {  }
+    public ListaCompras(string nome, DateTime dataCriacao, StatusListaCompras status)
+    {
+        Nome = nome;
+        DataCriacao = dataCriacao;
+        Status = status;
+    }
     public override void Atualizar(ListaCompras entidadeAtualizada)
     {
-        throw new NotImplementedException();
+        Nome = entidadeAtualizada.Nome;
+        Status = entidadeAtualizada.Status;
     }
 
     public override List<string> Validar()
     {
-        throw new NotImplementedException();
+        List<string> erros = new List<string>();
+
+        if (string.IsNullOrWhiteSpace(Nome))
+            erros.Add("O nome da lista de compras não pode ser vazio.");
+        
+        else if (Nome.Length < 3 || Nome.Length > 100)
+            erros.Add("O nome da lista de compras não pode ter mais de 100 caracteres.");
+            
+        return erros;
     }
 }
