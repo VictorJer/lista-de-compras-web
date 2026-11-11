@@ -1,3 +1,5 @@
+namespace ListaDeComprasWeb.WebApp.Modulos.ModuloListaCompras.Dominio;
+
 public enum StatusListaCompras
 {
     Aberta = 1,
