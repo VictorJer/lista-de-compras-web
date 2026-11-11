@@ -1,3 +1,4 @@
+using FluentResults;
 using ListaDeComprasWeb.WebApp.Modulos.ModuloListaCompras.Dominio;
 
 namespace ListaDeComprasWeb.WebApp.Modulos.ModuloListaCompras.Aplicacao;
@@ -12,10 +13,22 @@ public class ServicoListaCompras
         this.repositorioListaCompras = repositorioListaCompras;
     }
 
-    public void Cadastrar(CadastrarListaComprasDto cadastarDto)
+    public Result Cadastrar(CadastrarListaComprasDto cadastarDto)
     {
         var listaCompras = new ListaCompras(cadastarDto.Nome, DateTime.Now);
 
+        Result result = ValidarEntidade(listaCompras);
+
+        if (result.IsFailed)
+            return result;
+
         repositorioListaCompras.Cadastrar(listaCompras);
+
+        return Result.Ok();
+    }
+
+    private Result ValidarEntidade(ListaCompras listaCompras)
+    {
+        throw new NotImplementedException();
     }
 }
