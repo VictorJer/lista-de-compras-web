@@ -9,7 +9,7 @@ public sealed class ListaCompras : EntidadeBase<ListaCompras>
     public StatusListaCompras Status { get; set; } = StatusListaCompras.Aberta;
 
     public ListaCompras() {  }
-    public ListaCompras(string nome, DateTime dataCriacao, StatusListaCompras status)
+    public ListaCompras(string nome, DateTime dataCriacao, StatusListaCompras status = StatusListaCompras.Aberta)
     {
         Nome = nome;
         DataCriacao = dataCriacao;
@@ -30,7 +30,7 @@ public sealed class ListaCompras : EntidadeBase<ListaCompras>
         
         else if (Nome.Length < 3 || Nome.Length > 100)
             erros.Add("O nome da lista de compras não pode ter mais de 100 caracteres.");
-            
+
         return erros;
     }
 }
