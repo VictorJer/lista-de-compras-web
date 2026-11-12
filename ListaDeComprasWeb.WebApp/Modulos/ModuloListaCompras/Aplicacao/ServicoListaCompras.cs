@@ -29,6 +29,11 @@ public class ServicoListaCompras
 
     private Result ValidarEntidade(ListaCompras listaCompras)
     {
-        throw new NotImplementedException();
+        var erros = listaCompras.Validar();
+
+        if (erros.Count == 0)
+            return Result.Ok();
+
+        return Result.Fail(new Error(erros.First()).WithMetadata("Campo", string.Empty));
     }
 }
