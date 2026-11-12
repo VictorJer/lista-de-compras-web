@@ -2,13 +2,15 @@ using ListaDeComprasWeb.WebApp.Compartilhado.Dominio;
 using ListaDeComprasWeb.WebApp.Modulos.ModuloListaCompras.Dominio;
 using ListaDeComprasWeb.WebApp.Modulos.ModuloProduto.Dominio;
 
+namespace ListaDeComprasWeb.WebApp.Modulos.ModuloListaCompras.Dominio.ItemDaLista;
+
 public sealed class ItemLista : EntidadeBase<ItemLista>
 {
     public ListaCompras ListaCompras { get; set; } = null!;
     public Produto Produto { get; set; } = null!;
     public decimal Quantidade { get; set; }
 
-    public ItemLista() {  }
+    public ItemLista() { }
     public ItemLista(ListaCompras listaCompras, Produto produto, decimal quantidade)
     {
         ListaCompras = listaCompras;
@@ -38,7 +40,7 @@ public sealed class ItemLista : EntidadeBase<ItemLista>
 
             erros.Add("O campo \"Produto\" é obrigatório.");
         if (Quantidade <= 0)
-        
+
             erros.Add("O campo \"Quantidade\" deve ser um valor positivo.");
 
         return erros;
