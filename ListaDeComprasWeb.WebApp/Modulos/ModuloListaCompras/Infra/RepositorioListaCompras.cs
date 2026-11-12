@@ -1,7 +1,7 @@
 using ListaDeComprasWeb.WebApp.Compartilhado.Infra.Arquivos;
 using ListaDeComprasWeb.WebApp.Modulos.ModuloListaCompras.Dominio;
 
-public class RepositorioListaComprasEmArquivo : RepositorioBaseEmArquivo<ListaCompras>, IRepositorioListarCompras
+public class RepositorioListaComprasEmArquivo : RepositorioBaseEmArquivo<ListaCompras>, IRepositorioListaCompras
 {
     public RepositorioListaComprasEmArquivo(ContextoJson contexto) : base(contexto) {  }
 

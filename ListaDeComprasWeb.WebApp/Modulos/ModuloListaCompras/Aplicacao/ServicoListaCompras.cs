@@ -5,10 +5,10 @@ namespace ListaDeComprasWeb.WebApp.Modulos.ModuloListaCompras.Aplicacao;
 
 public class ServicoListaCompras
 {
-    private readonly IRepositorioListarCompras repositorioListaCompras;
+    private readonly IRepositorioListaCompras repositorioListaCompras;
     // private readonly IRepositorioItemLista repositorioProduto;
 
-    public ServicoListaCompras(IRepositorioListarCompras repositorioListaCompras)
+    public ServicoListaCompras(IRepositorioListaCompras repositorioListaCompras)
     {
         this.repositorioListaCompras = repositorioListaCompras;
     }

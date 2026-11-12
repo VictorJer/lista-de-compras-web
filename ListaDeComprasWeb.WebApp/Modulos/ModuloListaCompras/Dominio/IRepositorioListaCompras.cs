@@ -1,4 +1,5 @@
 using ListaDeComprasWeb.WebApp.Compartilhado.Dominio;
-using ListaDeComprasWeb.WebApp.Modulos.ModuloListaCompras.Dominio;
 
-public interface IRepositorioListarCompras : IRepositorio<ListaCompras>;
+namespace ListaDeComprasWeb.WebApp.Modulos.ModuloListaCompras.Dominio;
+
+public interface IRepositorioListaCompras : IRepositorio<ListaCompras>;
