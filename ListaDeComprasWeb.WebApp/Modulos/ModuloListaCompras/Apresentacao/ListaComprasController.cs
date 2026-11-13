@@ -57,7 +57,26 @@ public class ListaComprasController(ServicoListaCompras servicoListaCompras, IMa
         }
 
         EditarListaComprasViewModel viewModel = mapper.Map<EditarListaComprasViewModel>(result.Value);
-        
+
         return View(viewModel);
+    }
+
+    [HttpPost]
+    public ActionResult Editar(EditarListaComprasViewModel editarVm)
+    {
+        if (!ModelState.IsValid)
+            return View(editarVm);
+        
+        EditarListaComprasDto dto = mapper.Map<EditarListaComprasDto>(editarVm);
+        Result result = servicoListaCompras.Editar(dto);
+
+        if (result.IsFailed)
+        {
+            ModelState.AddModelError(result);
+
+            return View(editarVm);
+        }
+
+        return RedirectToAction(nameof(Listar));
     }
 }
