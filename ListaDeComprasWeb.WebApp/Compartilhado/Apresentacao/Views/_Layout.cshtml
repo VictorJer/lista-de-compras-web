@@ -1,61 +1,48 @@
+﻿@{
+    var controller = ViewContext.RouteData.Values["controller"]?.ToString();
+    var home = controller == "Home";
+}
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Organize suas compras de forma simples e prática.">
+    <meta name="theme-color" content="#214f3d">
+    <meta name="description" content="Na Lista: organize seus produtos, planeje suas compras e deixe o dia a dia mais leve.">
+    <link rel="icon" type="image/svg+xml" href="~/images/brand.svg">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true">
-    <title>@ViewBag.Titulo - Lista de Compras</title>
+    <title>@ViewBag.Titulo · Na Lista</title>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+    <nav class="navbar navbar-expand-lg" aria-label="Navegação principal">
         <div class="container">
-            <a class="navbar-brand d-flex align-items-center gap-2 fw-bold" asp-controller="Home" asp-action="Index">
-                <span class="brand-icon"><i class="bi bi-basket2-fill"></i></span>
-                Lista de Compras
+            <a class="navbar-brand" asp-controller="Home" asp-action="Index" aria-label="Na Lista — início">
+                <img src="~/images/brand.svg" width="42" height="42" alt=""><span>na lista<span class="brand-period">.</span><small>COMPRAS COM LEVEZA</small></span>
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuPrincipal" aria-controls="menuPrincipal" aria-expanded="false" aria-label="Abrir menu">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuPrincipal" aria-controls="menuPrincipal" aria-expanded="false" aria-label="Abrir menu"><span class="navbar-toggler-icon"></span></button>
             <div class="collapse navbar-collapse" id="menuPrincipal">
-                <div class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
-                    <a class="nav-link" asp-controller="Home" asp-action="Index"><i class="bi bi-house me-1"></i>Início</a>
-                    <a class="nav-link" asp-controller="Produto" asp-action="Listar"><i class="bi bi-basket2 me-1"></i>Produtos</a>
-                    <a class="nav-link" asp-controller="Categoria" asp-action="Listar"><i class="bi bi-tags me-1"></i>Categorias</a>
+                <div class="navbar-nav mx-auto gap-lg-2">
+                    <a class="nav-link @(home ? "active" : "")" aria-current="@(home ? "page" : null)" asp-controller="Home" asp-action="Index"><i class="bi bi-house" aria-hidden="true"></i>Início</a>
+                    <a class="nav-link @(controller == "ListaCompras" ? "active" : "")" aria-current="@(controller == "ListaCompras" ? "page" : null)" asp-controller="ListaCompras" asp-action="Listar"><i class="bi bi-clipboard2-check" aria-hidden="true"></i>Minhas listas</a>
+                    <a class="nav-link @(controller == "Produto" ? "active" : "")" aria-current="@(controller == "Produto" ? "page" : null)" asp-controller="Produto" asp-action="Listar"><i class="bi bi-basket2" aria-hidden="true"></i>Produtos</a>
+                    <a class="nav-link @(controller == "Categoria" ? "active" : "")" aria-current="@(controller == "Categoria" ? "page" : null)" asp-controller="Categoria" asp-action="Listar"><i class="bi bi-grid" aria-hidden="true"></i>Categorias</a>
                 </div>
+                <a class="btn btn-primary nav-create" asp-controller="ListaCompras" asp-action="Cadastrar"><i class="bi bi-plus-lg me-2" aria-hidden="true"></i>Nova lista</a>
             </div>
         </div>
     </nav>
-
-    <header class="page-header bg-white border-bottom">
-        <div class="container py-4">
-            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
-                <div>
-                    <p class="text-primary text-uppercase fw-semibold small mb-1">Painel de controle</p>
-                    <h1 class="h3 fw-bold mb-1">@ViewBag.Titulo</h1>
-                    <p class="text-body-secondary mb-0">Organize suas compras de forma simples e prática.</p>
-                </div>
-                @if (ViewContext.RouteData.Values["controller"]?.ToString() != "Produto")
-                {
-                    <a class="btn btn-primary" asp-controller="Categoria" asp-action="Listar"><i class="bi bi-tags me-2"></i>Ver categorias</a>
-                }
-            </div>
+    <header class="page-header @(home ? "home-header" : "")">
+        <div class="container">
+            <p class="eyebrow">@(home ? "Seu dia a dia, mais simples" : "Organize suas compras")</p>
+            <h1>@ViewBag.Titulo</h1>
+            @if (!home) { <p class="text-body-secondary mb-0">Tudo o que você precisa, bem organizado.</p> }
         </div>
     </header>
-
-    <main class="container py-4 py-lg-5">
-        @RenderBody()
-    </main>
-
-    <footer class="bg-white border-top mt-auto">
-        <div class="container d-flex flex-column flex-sm-row justify-content-between gap-2 py-4 text-body-secondary small">
-            <span><i class="bi bi-basket2 me-1"></i>Lista de Compras</span>
-            <span>Organize. Planeje. Compre melhor.</span>
-        </div>
-    </footer>
-
+    <main id="conteudo" class="container pb-5" tabindex="-1">@RenderBody()</main>
+    <footer class="mt-auto"><div class="container footer-inner"><span class="footer-brand"><img src="~/images/brand.svg" width="25" height="25" alt=""> na lista.</span><span>Menos esquecimento. Mais tranquilidade.</span><span class="footer-signature">Feito para facilitar seu dia <i class="bi bi-heart" aria-hidden="true"></i></span></div></footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
