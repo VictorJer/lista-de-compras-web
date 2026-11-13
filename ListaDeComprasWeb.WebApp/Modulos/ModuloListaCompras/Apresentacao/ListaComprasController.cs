@@ -1,7 +1,10 @@
 using AutoMapper;
+using FluentResults;
+using ListaDeComprasWeb.WebApp.Compartilhado.Apresentacao.Extensions;
 using ListaDeComprasWeb.WebApp.Modulos.ModuloListaCompras.Aplicacao;
-using ListaDeComprasWeb.WebApp.Modulos.ModuloListaCompras.Apresentacao;
 using Microsoft.AspNetCore.Mvc;
+
+namespace ListaDeComprasWeb.WebApp.Modulos.ModuloListaCompras.Apresentacao;
 
 public class ListaComprasController(ServicoListaCompras servicoListaCompras, IMapper mapper) : Controller
 {
@@ -11,6 +14,50 @@ public class ListaComprasController(ServicoListaCompras servicoListaCompras, IMa
         List<ListarListasComprasDto> listasCompras = servicoListaCompras.SelecionarTodos();
         List<ListarListasComprasViewModel> viewModel = mapper.Map<List<ListarListasComprasViewModel>>(listasCompras);
 
+        return View(viewModel);
+    }
+
+    [HttpGet]
+    public ActionResult Cadastrar()
+    {
+        CadastrarListaComprasViewModel viewModel = new CadastrarListaComprasViewModel(string.Empty);
+
+        return View(viewModel);
+    }
+
+    [HttpPost]
+    public ActionResult Cadastrar(CadastrarListaComprasViewModel viewModel)
+    {
+        if (!ModelState.IsValid)
+            return View(viewModel);
+
+        CadastrarListaComprasDto dto = mapper.Map<CadastrarListaComprasDto>(viewModel);
+        var result = servicoListaCompras.Cadastrar(dto);
+
+        if (result.IsFailed)
+        {
+            ModelState.AddModelError(result);
+
+            return View(viewModel);
+        }
+
+        return RedirectToAction(nameof(Listar));
+    }
+
+    [HttpGet]
+    public ActionResult Editar(Guid id)
+    {
+        Result<DetalhesListaComprasDto> result = servicoListaCompras.SelecionarPorId(id);
+
+        if (result.IsFailed)
+        {
+            TempData.AddErrorMessage(result);
+
+            return RedirectToAction(nameof(Listar));
+        }
+
+        EditarListaComprasViewModel viewModel = mapper.Map<EditarListaComprasViewModel>(result.Value);
+        
         return View(viewModel);
     }
 }

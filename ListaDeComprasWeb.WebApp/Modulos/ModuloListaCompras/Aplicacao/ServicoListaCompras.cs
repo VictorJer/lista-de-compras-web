@@ -60,6 +60,27 @@ public class ServicoListaCompras
         return Result.Ok();
     }
 
+    public Result<DetalhesListaComprasDto> SelecionarPorId(Guid id)
+    {
+        ListaCompras? listaSelecionada = repositorioListaCompras.SelecionarPorId(id);
+
+        if (listaSelecionada == null)
+            return Result.Fail("Lista de compras não encontrada.");
+
+        List<ItemLista> itens = SelecionarItensDaLista(listaSelecionada.Id);
+
+        var detalhes = new DetalhesListaComprasDto(
+            listaSelecionada.Id,
+            listaSelecionada.Nome,
+            listaSelecionada.DataCriacao,
+            listaSelecionada.Status,
+            itens.Count,
+            itens.Sum(i => i.CalcularSubtotal())
+        );
+
+        return Result.Ok(detalhes);
+    }
+
     public List<ListarListasComprasDto> SelecionarTodos()
     {
         return repositorioListaCompras
