@@ -1,0 +1,64 @@
+﻿@using ListaDeComprasWeb.WebApp.Modulos.ModuloListaCompras.Dominio
+@model ListaDeComprasWeb.WebApp.Modulos.ModuloListaCompras.Apresentacao.EditarListaComprasViewModel
+
+@{
+    Layout = "_Layout";
+    ViewBag.Titulo = "Editar lista de compras";
+}
+
+<a class="back-link" asp-action="Listar"><i class="bi bi-arrow-left" aria-hidden="true"></i> Voltar para minhas listas</a>
+<div class="row g-4 list-create-layout">
+    <div class="col-lg-7">
+        <section class="card list-create-card" aria-labelledby="edit-title">
+            <div class="card-body p-4 p-md-5">
+                <span class="module-icon icon-green"><i class="bi bi-pencil-square" aria-hidden="true"></i></span>
+                <span class="eyebrow">Seu planejamento em dia</span>
+                <h2 id="edit-title" class="h3 fw-bold">Ajuste sua próxima compra.</h2>
+                <p class="text-body-secondary mb-4">Atualize o nome e o andamento da sua lista.</p>
+                <form asp-action="Editar" asp-route-id="@Model.Id" method="post">
+                    <input asp-for="Id" type="hidden" />
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+                    <div class="mb-4">
+                        <label asp-for="Nome" class="form-label fw-semibold">Nome da lista <span class="text-body-secondary fw-normal">(obrigatório)</span></label>
+                        <input asp-for="Nome" class="form-control form-control-lg" placeholder="Ex.: Compras da semana" minlength="3" maxlength="100" required aria-describedby="nome-ajuda nome-erro" aria-invalid="@(ViewData.ModelState[nameof(Model.Nome)]?.Errors.Count > 0 ? "true" : null)" />
+                        <div id="nome-ajuda" class="form-text">Use entre 3 e 100 caracteres para identificar sua compra.</div>
+                        <span id="nome-erro" asp-validation-for="Nome" class="text-danger small" role="alert"></span>
+                    </div>
+                    <div class="mb-4">
+                        <label asp-for="Status" class="form-label fw-semibold">Status da lista <span class="text-body-secondary fw-normal">(obrigatório)</span></label>
+                        <select asp-for="Status" class="form-select" required aria-describedby="status-ajuda status-erro" aria-invalid="@(ViewData.ModelState[nameof(Model.Status)]?.Errors.Count > 0 ? "true" : null)">
+                            <option value="">Selecione o status</option>
+                            <option value="@((int)StatusListaCompras.Aberta)">Aberta</option>
+                            <option value="@((int)StatusListaCompras.Concluida)">Concluída</option>
+                        </select>
+                        <div id="status-ajuda" class="form-text">Marque como concluída ao terminar a compra. Se precisar retomá-la, selecione aberta.</div>
+                        <span id="status-erro" asp-validation-for="Status" class="text-danger small" role="alert"></span>
+                    </div>
+                    <div class="list-create-info">
+                        <i class="bi bi-info-circle" aria-hidden="true"></i>
+                        <p>Os itens e a data de criação são mantidos ao salvar suas alterações.</p>
+                    </div>
+                    <div class="list-form-actions">
+                        <a class="btn btn-outline-secondary" asp-action="Listar">Cancelar</a>
+                        <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg me-2" aria-hidden="true"></i>Salvar alterações</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </div>
+    <div class="col-lg-5">
+        <aside class="list-create-aside" aria-labelledby="planning-title">
+            <img src="~/images/shopping-bag.svg" width="200" height="200" alt="" />
+            <span class="eyebrow">Compras com leveza</span>
+            <h2 id="planning-title">Os planos mudaram?<br>A lista acompanha.</h2>
+            <p>Organize suas compras no seu ritmo. Você pode atualizar o nome, concluir uma lista ou reabri-la quando precisar.</p>
+            <dl class="mb-4">
+                <dt class="mb-2"><span class="list-status status-open"><i class="bi bi-clock" aria-hidden="true"></i>Aberta</span></dt>
+                <dd class="small text-body-secondary mb-3">Para compras que você ainda está planejando ou realizando.</dd>
+                <dt class="mb-2"><span class="list-status status-complete"><i class="bi bi-check2-circle" aria-hidden="true"></i>Concluída</span></dt>
+                <dd class="small text-body-secondary mb-0">Para compras finalizadas que você quer manter no histórico.</dd>
+            </dl>
+            <div class="list-name-tip"><i class="bi bi-lightbulb" aria-hidden="true"></i><div><strong>Deixe fácil de reconhecer</strong><span>Um nome como “Feira de sábado” ajuda a encontrar a lista certa na próxima visita.</span></div></div>
+        </aside>
+    </div>
+</div>

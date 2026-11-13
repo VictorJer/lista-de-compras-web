@@ -26,6 +26,7 @@ public record EditarListaComprasViewModel(
     string Nome,
 
     [Required(ErrorMessage = "O campo \"Status\" é obrigatório.")]
+    [EnumDataType(typeof(StatusListaCompras), ErrorMessage = "Selecione um status válido para a lista.")]
     StatusListaCompras Status
 );
 

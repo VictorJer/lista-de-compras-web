@@ -65,6 +65,7 @@ public class ListaComprasController(ServicoListaCompras servicoListaCompras, IMa
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public ActionResult Editar(EditarListaComprasViewModel editarVm)
     {
         if (!ModelState.IsValid)
@@ -80,6 +81,7 @@ public class ListaComprasController(ServicoListaCompras servicoListaCompras, IMa
             return View(editarVm);
         }
 
+        TempData["MensagemSucesso"] = "Lista atualizada! Tudo pronto para continuar seu planejamento.";
         return RedirectToAction(nameof(Listar));
     }
 
