@@ -1,5 +1,5 @@
 using ListaDeComprasWeb.WebApp.Compartilhado.Infra.Arquivos;
-using ListaDeComprasWeb.WebApp.Modulos.ModuloListaCompras.Dominio.ItemDaLista;
+using ListaDeComprasWeb.WebApp.Modulos.ModuloItemLista.Dominio;
 
 public class RepositorioItemListaEmArquivo : RepositorioBaseEmArquivo<ItemLista>, IRepositorioItemLista
 {

@@ -2,7 +2,7 @@ using ListaDeComprasWeb.WebApp.Compartilhado.Dominio;
 using ListaDeComprasWeb.WebApp.Modulos.ModuloListaCompras.Dominio;
 using ListaDeComprasWeb.WebApp.Modulos.ModuloProduto.Dominio;
 
-namespace ListaDeComprasWeb.WebApp.Modulos.ModuloListaCompras.Dominio.ItemDaLista;
+namespace ListaDeComprasWeb.WebApp.Modulos.ModuloItemLista.Dominio;
 
 public sealed class ItemLista : EntidadeBase<ItemLista>
 {

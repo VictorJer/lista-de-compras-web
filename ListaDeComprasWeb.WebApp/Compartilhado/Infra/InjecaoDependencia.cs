@@ -1,7 +1,7 @@
 using ListaDeComprasWeb.WebApp.Compartilhado.Infra.Arquivos;
 using ListaDeComprasWeb.WebApp.Modulos.ModuloCategoria.Dominio;
+using ListaDeComprasWeb.WebApp.Modulos.ModuloItemLista.Dominio;
 using ListaDeComprasWeb.WebApp.Modulos.ModuloListaCompras.Dominio;
-using ListaDeComprasWeb.WebApp.Modulos.ModuloListaCompras.Dominio.ItemDaLista;
 using ListaDeComprasWeb.WebApp.Modulos.ModuloProduto.Dominio;
 
 namespace ListaDeComprasWeb.WebApp.Compartilhado.Infra;
