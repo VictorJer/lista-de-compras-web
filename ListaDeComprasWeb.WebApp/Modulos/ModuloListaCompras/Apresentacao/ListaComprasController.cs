@@ -27,6 +27,7 @@ public class ListaComprasController(ServicoListaCompras servicoListaCompras, IMa
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public ActionResult Cadastrar(CadastrarListaComprasViewModel viewModel)
     {
         if (!ModelState.IsValid)
@@ -42,6 +43,7 @@ public class ListaComprasController(ServicoListaCompras servicoListaCompras, IMa
             return View(viewModel);
         }
 
+        TempData["MensagemSucesso"] = "Lista criada! Sua próxima compra já tem um lugar.";
         return RedirectToAction(nameof(Listar));
     }
 

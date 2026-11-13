@@ -1,93 +1,75 @@
-@using ListaDeComprasWeb.WebApp.Modulos.ModuloListaCompras.Dominio
+﻿@using ListaDeComprasWeb.WebApp.Modulos.ModuloListaCompras.Dominio
 @model List<ListaDeComprasWeb.WebApp.Modulos.ModuloListaCompras.Apresentacao.ListarListasComprasViewModel>
 
 @{
     Layout = "_Layout";
-    ViewBag.Titulo = "Listas de compras";
+    ViewBag.Titulo = "Minhas listas";
+    var cultura = System.Globalization.CultureInfo.GetCultureInfo("pt-BR");
 }
 
 @if (TempData["MensagemErro"] is string mensagemErro)
 {
     <div class="alert alert-danger" role="alert">@mensagemErro</div>
 }
+@if (TempData["MensagemSucesso"] is string mensagemSucesso)
+{
+    <div class="alert alert-success" role="status"><i class="bi bi-check-circle me-2" aria-hidden="true"></i>@mensagemSucesso</div>
+}
 
 <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
     <div>
-        <h2 class="h4 fw-bold mb-1">Listas cadastradas</h2>
-        <p class="text-body-secondary mb-0">Acompanhe suas compras e os valores estimados.</p>
+        <h2 class="h4 fw-bold mb-1">Cada compra, um plano.</h2>
+        <p class="text-body-secondary mb-0">Acompanhe suas listas e os valores estimados em um só lugar.</p>
     </div>
-
     <div class="d-flex align-items-center gap-3">
-        <span class="badge rounded-pill text-bg-primary">
-            @Model.Count lista(s)
-        </span>
-        <a class="btn btn-primary" asp-action="Cadastrar">
-            <i class="bi bi-plus-lg me-2"></i>Nova lista
-        </a>
+        <span class="badge rounded-pill text-bg-primary">@Model.Count @(Model.Count == 1 ? "lista" : "listas")</span>
+        <a class="btn btn-primary" asp-action="Cadastrar"><i class="bi bi-plus-lg me-2" aria-hidden="true"></i>Nova lista</a>
     </div>
 </div>
 
-<div class="card">
-    @if (Model.Count == 0)
-    {
-        <div class="card-body text-center py-5">
-            <i class="bi bi-clipboard2-check display-5 text-body-secondary"></i>
-            <h3 class="h5 mt-3">Nenhuma lista cadastrada</h3>
-            <p class="text-body-secondary mb-3">Crie uma lista para começar a organizar suas compras.</p>
-            <a class="btn btn-primary" asp-action="Cadastrar">
-                <i class="bi bi-plus-lg me-2"></i>Criar primeira lista
-            </a>
-        </div>
-    }
-    else
-    {
-        <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
-                <thead class="table-light">
-                    <tr>
-                        <th scope="col">Lista</th>
-                        <th scope="col">Criada em</th>
-                        <th scope="col">Status</th>
-                        <th scope="col" class="text-end">Itens</th>
-                        <th scope="col" class="text-end">Total estimado</th>
-                        <th scope="col" class="text-end">Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var lista in Model)
-                    {
-                        <tr>
-                            <td class="fw-semibold">@lista.Nome</td>
-                            <td class="text-nowrap">@lista.DataCriacao.ToString("dd/MM/yyyy")</td>
-                            <td>
-                                @if (lista.Status == StatusListaCompras.Aberta)
-                                {
-                                    <span class="badge text-bg-success">Aberta</span>
-                                }
-                                else
-                                {
-                                    <span class="badge text-bg-secondary">Concluída</span>
-                                }
-                            </td>
-                            <td class="text-end">@lista.TotalItens</td>
-                            <td class="text-end text-nowrap">@lista.TotalEstimado.ToString("C", System.Globalization.CultureInfo.GetCultureInfo("pt-BR"))</td>
-                            <td class="text-end">
-                                <div class="btn-group" role="group" aria-label="Ações da lista @lista.Nome">
-                                    <a class="btn btn-sm btn-outline-primary" asp-action="Editar" asp-route-id="@lista.Id">
-                                        <i class="bi bi-pencil me-1"></i>Editar
-                                    </a>
-                                    @if (lista.Status == StatusListaCompras.Aberta)
-                                    {
-                                        <a class="btn btn-sm btn-outline-success" asp-action="Concluir" asp-route-id="@lista.Id">
-                                            <i class="bi bi-check-lg me-1"></i>Concluir
-                                        </a>
-                                    }
-                                </div>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-    }
-</div>
+@if (Model.Count == 0)
+{
+    <section class="card list-empty-state" aria-labelledby="empty-title">
+        <span class="module-icon icon-green"><i class="bi bi-clipboard2-check" aria-hidden="true"></i></span>
+        <span class="eyebrow">Tudo começa com uma lista</span>
+        <h3 id="empty-title" class="h4 fw-bold">Sua próxima compra começa aqui.</h3>
+        <p class="text-body-secondary">Você ainda não tem listas. Crie a primeira e dê um pouco mais de leveza à sua rotina.</p>
+        <a class="btn btn-primary" asp-action="Cadastrar"><i class="bi bi-plus-lg me-2" aria-hidden="true"></i>Criar primeira lista</a>
+    </section>
+}
+else
+{
+    <div class="row g-4 shopping-list-grid">
+        @foreach (var lista in Model)
+        {
+            var aberta = lista.Status == StatusListaCompras.Aberta;
+            <div class="col-md-6 col-xl-4">
+                <article class="card shopping-list-card @(aberta ? "is-open" : "is-complete")" aria-labelledby="lista-@lista.Id">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between align-items-center gap-2 mb-4">
+                            <span class="module-icon icon-green mb-0"><i class="bi @(aberta ? "bi-basket2" : "bi-bag-check")" aria-hidden="true"></i></span>
+                            <span class="list-status @(aberta ? "status-open" : "status-complete")"><i class="bi @(aberta ? "bi-clock" : "bi-check2-circle")" aria-hidden="true"></i>@(aberta ? "Aberta" : "Concluída")</span>
+                        </div>
+                        <h3 id="lista-@lista.Id" class="h5 fw-bold list-card-name">@lista.Nome</h3>
+                        <p class="list-created"><i class="bi bi-calendar3" aria-hidden="true"></i>Criada em <time datetime="@lista.DataCriacao.ToString("yyyy-MM-dd")">@lista.DataCriacao.ToString("dd/MM/yyyy")</time></p>
+                        <dl class="list-card-totals">
+                            <div><dt>Itens na lista</dt><dd>@lista.TotalItens <span>@(lista.TotalItens == 1 ? "item" : "itens")</span></dd></div>
+                            <div><dt>Total estimado</dt><dd>@lista.TotalEstimado.ToString("C", cultura)</dd></div>
+                        </dl>
+                    </div>
+                    <div class="list-card-actions">
+                        <a class="btn btn-outline-primary" asp-action="Editar" asp-route-id="@lista.Id" aria-label="Editar lista @lista.Nome"><i class="bi bi-pencil me-2" aria-hidden="true"></i>Editar</a>
+                        @if (aberta)
+                        {
+                            <a class="btn btn-primary" asp-action="Concluir" asp-route-id="@lista.Id" aria-label="Concluir lista @lista.Nome"><i class="bi bi-check-lg me-2" aria-hidden="true"></i>Concluir</a>
+                        }
+                        else
+                        {
+                            <span class="list-completed-note"><i class="bi bi-check2-all" aria-hidden="true"></i>Compra concluída</span>
+                        }
+                    </div>
+                </article>
+            </div>
+        }
+    </div>
+}
