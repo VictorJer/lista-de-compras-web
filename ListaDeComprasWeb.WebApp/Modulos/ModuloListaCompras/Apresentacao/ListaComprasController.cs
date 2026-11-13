@@ -2,6 +2,7 @@ using AutoMapper;
 using FluentResults;
 using ListaDeComprasWeb.WebApp.Compartilhado.Apresentacao.Extensions;
 using ListaDeComprasWeb.WebApp.Modulos.ModuloListaCompras.Aplicacao;
+using ListaDeComprasWeb.WebApp.Modulos.ModuloListaCompras.Dominio;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ListaDeComprasWeb.WebApp.Modulos.ModuloListaCompras.Apresentacao;
@@ -75,6 +76,35 @@ public class ListaComprasController(ServicoListaCompras servicoListaCompras, IMa
             ModelState.AddModelError(result);
 
             return View(editarVm);
+        }
+
+        return RedirectToAction(nameof(Listar));
+    }
+
+    public ActionResult Concluir(Guid id)
+    {
+        Result<DetalhesListaComprasDto> result = servicoListaCompras.SelecionarPorId(id);
+
+        if (result.IsFailed)
+        {
+            TempData.AddErrorMessage(result);
+
+            return RedirectToAction(nameof(Listar));
+        }
+
+        DetalhesListaComprasDto detalhes = result.Value;
+
+        Result resultEdicao = servicoListaCompras.Editar(new EditarListaComprasDto(
+            detalhes.Id,
+            detalhes.Nome,
+            StatusListaCompras.Concluida
+        ));
+
+        if (resultEdicao.IsFailed)
+        {
+            TempData.AddErrorMessage(result);
+
+            return RedirectToAction(nameof(Listar));
         }
 
         return RedirectToAction(nameof(Listar));
