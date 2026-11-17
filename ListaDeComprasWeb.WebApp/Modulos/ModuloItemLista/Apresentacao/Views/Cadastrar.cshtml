@@ -1,0 +1,59 @@
+@model ListaDeComprasWeb.WebApp.Modulos.ModuloListaCompras.Apresentacao.CadastrarItemListaViewModel
+
+@{
+    Layout = "_Layout";
+    ViewBag.Titulo = "Adicionar item";
+    var lista = (ListaDeComprasWeb.WebApp.Modulos.ModuloListaCompras.Apresentacao.DetalhesListaItemListaViewModel?)ViewBag.Lista;
+    var cultura = System.Globalization.CultureInfo.GetCultureInfo("pt-BR");
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-7">
+        <div class="card">
+            <div class="card-header bg-white py-3">
+                <h2 class="h5 fw-bold mb-1">Adicionar produto à lista</h2>
+                <p class="text-body-secondary mb-0">Lista: <strong>@(lista?.Nome ?? "Lista de compras")</strong></p>
+            </div>
+            <div class="card-body p-4">
+                <form asp-action="Cadastrar" method="post">
+                    @Html.AntiForgeryToken()
+                    <input asp-for="ListaComprasId" type="hidden" />
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+                    @if (Model.Produtos.Count == 0)
+                    {
+                        <div class="alert alert-warning" role="alert">
+                            <i class="bi bi-info-circle me-2" aria-hidden="true"></i>Cadastre um produto antes de adicioná-lo à lista.
+                            <a class="alert-link" asp-controller="Produto" asp-action="Cadastrar">Cadastrar produto</a>
+                        </div>
+                    }
+                    <div class="mb-3">
+                        <label asp-for="ProdutoId" class="form-label fw-semibold">Produto</label>
+                        <select asp-for="ProdutoId" class="form-select" disabled="@(Model.Produtos.Count == 0)" id="produto-select">
+                            <option value="">Selecione um produto</option>
+                            @foreach (var produto in Model.Produtos)
+                            {
+                                <option value="@produto.Id" data-category="@produto.CategoriaNome" data-color="@(System.Text.RegularExpressions.Regex.IsMatch(produto.CategoriaCor, "^#[0-9a-fA-F]{6}$") ? produto.CategoriaCor : "#71806a")" data-unit="@produto.UnidadeMedida" data-price="@produto.PrecoAproximado.ToString("C", cultura)">@produto.Nome — @produto.CategoriaNome, @produto.UnidadeMedida, @produto.PrecoAproximado.ToString("C", cultura)</option>
+                            }
+                        </select>
+                        <span asp-validation-for="ProdutoId" class="text-danger"></span>
+                    </div>
+                    <div class="product-selection-summary mb-3" id="product-summary" aria-live="polite">
+                        <span class="category-swatch" id="product-category-color" aria-hidden="true"></span>
+                        <div><strong id="product-category">Selecione um produto para ver seus detalhes.</strong><span id="product-unit-price" class="text-body-secondary d-block small"></span></div>
+                    </div>
+                    <div class="mb-4">
+                        <label asp-for="Quantidade" class="form-label fw-semibold">Quantidade</label>
+                        <input asp-for="Quantidade" type="number" class="form-control" min="0.01" step="0.01" inputmode="decimal" />
+                        <div class="form-text">Use valores decimais, como 1,5.</div>
+                        <span asp-validation-for="Quantidade" class="text-danger"></span>
+                    </div>
+                    <div class="d-flex justify-content-end flex-wrap gap-2">
+                        <a class="btn btn-outline-secondary" asp-action="Listar" asp-route-listaComprasId="@Model.ListaComprasId">Cancelar</a>
+                        <button type="submit" class="btn btn-primary" disabled="@(Model.Produtos.Count == 0)"><i class="bi bi-plus-lg me-2" aria-hidden="true"></i>Adicionar à lista</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/js/item-lista.js" asp-append-version="true" defer></script>

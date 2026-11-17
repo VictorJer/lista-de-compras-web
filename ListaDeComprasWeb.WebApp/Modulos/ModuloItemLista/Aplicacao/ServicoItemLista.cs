@@ -3,6 +3,7 @@ using ListaDeComprasWeb.WebApp.Modulos.ModuloItemLista.Dominio;
 using ListaDeComprasWeb.WebApp.Modulos.ModuloListaCompras.Aplicacao;
 using ListaDeComprasWeb.WebApp.Modulos.ModuloListaCompras.Dominio;
 using ListaDeComprasWeb.WebApp.Modulos.ModuloProduto.Dominio;
+using ListaDeComprasWeb.WebApp.Modulos.ModuloProduto.Aplicacao;
 
 namespace ListaDeComprasWeb.WebApp.Modulos.ModuloItemLista.Aplicacao;
 
@@ -64,6 +65,43 @@ public class ServicoItemLista
             .Filtrar(i => i.ListaCompras.Id == listaComprasId)
             .Select(MapearParaListarDto)
             .ToList();
+    }
+
+    public List<OpcaoProdutoDto> SelecionarProdutos()
+    {
+        return repositorioProduto
+            .SelecionarTodos()
+            .Select(p => new OpcaoProdutoDto(
+                p.Id,
+                p.Nome,
+                p.Categoria.Nome,
+                p.Categoria.Cor,
+                p.UnidadeMedida,
+                p.PrecoAproximado
+            ))
+            .ToList();
+    }
+
+    public Result<DetalhesItemListaDto> SelecionarPorId(Guid id)
+    {
+        ItemLista? item = repositorioItemLista.SelecionarPorId(id);
+
+        if (item == null)
+            return Result.Fail("Item da lista não encontrado.");
+
+        return Result.Ok(new DetalhesItemListaDto(
+            item.Id,
+            item.ListaCompras.Id,
+            item.ListaCompras.Nome,
+            item.Produto.Id,
+            item.Produto.Nome,
+            item.Produto.Categoria.Nome,
+            item.Produto.Categoria.Cor,
+            item.Produto.UnidadeMedida,
+            item.Produto.PrecoAproximado,
+            item.Quantidade,
+            item.CalcularSubtotal()
+        ));
     }
 
     public Result<DetalhesListaComprasDto> SelecionarDetalhesLista(Guid listaComprasId)

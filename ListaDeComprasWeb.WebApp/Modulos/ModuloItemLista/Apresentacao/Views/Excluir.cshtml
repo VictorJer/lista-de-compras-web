@@ -1,0 +1,36 @@
+@model ListaDeComprasWeb.WebApp.Modulos.ModuloListaCompras.Apresentacao.ExcluirItemListaViewModel
+
+@{
+    Layout = "_Layout";
+    ViewBag.Titulo = "Remover item";
+    var cultura = System.Globalization.CultureInfo.GetCultureInfo("pt-BR");
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-7">
+        <section class="card">
+            <div class="card-header bg-white py-3">
+                <h2 class="h5 fw-bold mb-1">Confirmar remoção</h2>
+                <p class="text-body-secondary mb-0">Confira o item antes de removê-lo da lista.</p>
+            </div>
+            <div class="card-body p-4">
+                <dl class="row mb-4 item-confirm-details">
+                    <dt class="col-sm-4">Lista</dt><dd class="col-sm-8">@Model.ListaComprasNome</dd>
+                    <dt class="col-sm-4">Produto</dt><dd class="col-sm-8">@Model.ProdutoNome</dd>
+                    <dt class="col-sm-4">Categoria</dt><dd class="col-sm-8">@Model.CategoriaNome</dd>
+                    <dt class="col-sm-4">Quantidade</dt><dd class="col-sm-8">@Model.Quantidade.ToString("0.##", cultura) @Model.UnidadeMedida</dd>
+                    <dt class="col-sm-4">Subtotal estimado</dt><dd class="col-sm-8 fw-bold">@Model.Subtotal.ToString("C", cultura)</dd>
+                </dl>
+                <form asp-action="Excluir" method="post">
+                    @Html.AntiForgeryToken()
+                    <input asp-for="Id" type="hidden" />
+                    <input asp-for="ListaComprasId" type="hidden" />
+                    <div class="d-flex justify-content-end flex-wrap gap-2">
+                        <a class="btn btn-outline-secondary" asp-action="Listar" asp-route-listaComprasId="@Model.ListaComprasId">Cancelar</a>
+                        <button type="submit" class="btn btn-danger"><i class="bi bi-trash me-2" aria-hidden="true"></i>Remover item</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </div>
+</div>

@@ -1,0 +1,64 @@
+@using ListaDeComprasWeb.WebApp.Modulos.ModuloListaCompras.Dominio
+@model ListaDeComprasWeb.WebApp.Modulos.ModuloListaCompras.Apresentacao.GerenciaItemListaViewModel
+
+@{
+    Layout = "_Layout";
+    ViewBag.Titulo = "Itens da lista";
+    var cultura = System.Globalization.CultureInfo.GetCultureInfo("pt-BR");
+    var aberta = Model.Lista.Status == StatusListaCompras.Aberta;
+}
+
+@if (TempData["MensagemErro"] is string mensagemErro)
+{
+    <div class="alert alert-danger" role="alert">@mensagemErro</div>
+}
+@if (TempData["MensagemSucesso"] is string mensagemSucesso)
+{
+    <div class="alert alert-success" role="status"><i class="bi bi-check-circle me-2" aria-hidden="true"></i>@mensagemSucesso</div>
+}
+
+<div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3 mb-4">
+    <div>
+        <a class="text-decoration-none small" asp-controller="ListaCompras" asp-action="Listar"><i class="bi bi-arrow-left me-1" aria-hidden="true"></i>Minhas listas</a>
+        <h2 class="h3 fw-bold mt-2 mb-2 list-card-name">@Model.Lista.Nome</h2>
+        <span class="list-status @(aberta ? "status-open" : "status-complete")">@(aberta ? "Aberta" : "Concluída")</span>
+    </div>
+    <a class="btn btn-primary" asp-action="Cadastrar" asp-route-listaComprasId="@Model.Lista.Id"><i class="bi bi-plus-lg me-2" aria-hidden="true"></i>Adicionar item</a>
+</div>
+
+<section class="row g-3 mb-4" aria-label="Resumo da lista">
+    <div class="col-6"><div class="card p-3 h-100"><span class="small text-body-secondary">Itens distintos</span><strong class="fs-4">@Model.Lista.TotalItens</strong></div></div>
+    <div class="col-6"><div class="card p-3 h-100"><span class="small text-body-secondary">Total estimado</span><strong class="fs-4 text-primary">@Model.Lista.TotalEstimado.ToString("C", cultura)</strong></div></div>
+</section>
+
+@if (Model.Itens.Count == 0)
+{
+    <section class="card list-empty-state item-list-empty" aria-labelledby="empty-title">
+        <span class="module-icon icon-green"><i class="bi bi-basket2" aria-hidden="true"></i></span>
+        <span class="eyebrow">Sua lista está pronta</span>
+        <h3 id="empty-title" class="h4 fw-bold">Adicione o primeiro produto.</h3>
+        <p class="text-body-secondary">Os produtos e seus valores estimados aparecerão aqui. Por enquanto, 0 itens e @Model.Lista.TotalEstimado.ToString("C", cultura).</p>
+        <a class="btn btn-primary" asp-action="Cadastrar" asp-route-listaComprasId="@Model.Lista.Id">Adicionar primeiro item</a>
+    </section>
+}
+else
+{
+    <div class="item-list-table-wrap">
+        <table class="table align-middle item-list-table">
+            <thead><tr><th scope="col">Produto</th><th scope="col">Categoria</th><th scope="col">Preço</th><th scope="col">Quantidade</th><th scope="col">Subtotal</th><th scope="col"><span class="visually-hidden">Ações</span></th></tr></thead>
+            <tbody>
+            @foreach (var item in Model.Itens)
+            {
+                <tr>
+                    <td data-label="Produto"><strong class="item-product-name">@item.ProdutoNome</strong></td>
+                    <td data-label="Categoria"><span class="category-label"><span class="category-swatch" style="--category-color: @(System.Text.RegularExpressions.Regex.IsMatch(item.CategoriaCor, "^#[0-9a-fA-F]{6}$") ? item.CategoriaCor : "#71806a")" aria-hidden="true"></span>@item.CategoriaNome</span></td>
+                    <td data-label="Preço">@item.PrecoAproximado.ToString("C", cultura) <span class="text-body-secondary">/ @item.UnidadeMedida</span></td>
+                    <td data-label="Quantidade">@item.Quantidade.ToString("0.##", cultura) @item.UnidadeMedida</td>
+                    <td data-label="Subtotal"><strong>@item.Subtotal.ToString("C", cultura)</strong></td>
+                    <td data-label="Ações"><a class="btn btn-sm btn-outline-secondary" asp-action="Excluir" asp-route-id="@item.Id" aria-label="Remover @item.ProdutoNome"><i class="bi bi-trash" aria-hidden="true"></i><span class="d-sm-none ms-2">Remover</span></a></td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+}

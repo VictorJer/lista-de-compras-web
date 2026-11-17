@@ -146,6 +146,27 @@ footer { border-top: 1px solid var(--line); }
 .list-card-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; padding: 0 24px 24px; }
 .list-card-actions .btn { flex: 1; font-size: .82rem; }
 .list-completed-note { display: inline-flex; align-items: center; gap: 5px; margin-left: auto; font-size: .72rem; color: var(--muted); }
+.item-list-table-wrap { max-width: 100%; }
+.item-list-table th, .item-list-table td { vertical-align: middle; }
+.item-list-table td { overflow-wrap: anywhere; }
+.item-product-name { display: block; max-width: 240px; overflow-wrap: anywhere; }
+.category-label { display: inline-flex; align-items: center; gap: 8px; }
+.category-swatch { width: 12px; height: 12px; flex: 0 0 12px; border-radius: 50%; background-color: var(--category-color, #71806a); border: 1px solid #0002; }
+.item-list-empty { margin-top: 1rem; }
+.product-selection-summary { display: flex; align-items: center; gap: 12px; min-height: 64px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px; background: #f7f8f2; }
+.product-selection-summary .category-swatch { width: 16px; height: 16px; flex-basis: 16px; }
+@media (max-width: 575.98px) {
+    .item-list-table thead { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+    .item-list-table, .item-list-table tbody { display: block; width: 100%; }
+    .item-list-table tbody { display: grid; gap: 12px; }
+    .item-list-table tbody tr { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; padding: 16px; border: 1px solid var(--line); border-radius: 14px; background: #fffefa; }
+    .item-list-table tbody td { min-width: 0; padding: 0; border: 0; font-size: .82rem; overflow-wrap: anywhere; }
+    .item-list-table tbody td::before { content: attr(data-label); display: block; margin-bottom: 4px; color: var(--muted); font-size: .68rem; font-weight: 600; }
+    .item-list-table tbody td:first-child { grid-column: 1 / -1; }
+    .item-list-table tbody td:last-child { grid-column: 1 / -1; justify-self: end; }
+    .item-product-name { max-width: none; }
+    .item-list-empty { padding: 36px 20px; }
+}
 @media (prefers-reduced-motion: no-preference) {
     .shopping-list-card { transition: transform .25s ease, box-shadow .25s, border-color .25s; }
     @media (hover: hover) and (pointer: fine) {
