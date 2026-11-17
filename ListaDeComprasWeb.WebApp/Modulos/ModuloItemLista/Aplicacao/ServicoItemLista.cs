@@ -1,5 +1,6 @@
 using FluentResults;
 using ListaDeComprasWeb.WebApp.Modulos.ModuloItemLista.Dominio;
+using ListaDeComprasWeb.WebApp.Modulos.ModuloListaCompras.Aplicacao;
 using ListaDeComprasWeb.WebApp.Modulos.ModuloListaCompras.Apresentacao;
 using ListaDeComprasWeb.WebApp.Modulos.ModuloListaCompras.Dominio;
 using ListaDeComprasWeb.WebApp.Modulos.ModuloProduto.Dominio;
@@ -61,24 +62,88 @@ public class ServicoItemLista
     public List<ListarItensListaDto> SelecionarTodosPorLista(Guid listaComprasId)
     {
         return repositorioItemLista
-            .SelecionarTodos()
-            .Where(i => i.ListaCompras.Id == listaComprasId)
+            .Filtrar(i => i.ListaCompras.Id == listaComprasId)
             .Select(MapearParaListarDto)
             .ToList();
     }
 
-    public Result<DetalhesItemListaDto> SelecionarDetalhesLista(Guid listaComprasId)
+    public Result<DetalhesListaComprasDto> SelecionarDetalhesLista(Guid listaComprasId)
     {
         ListaCompras? lista = repositorioListaCompras.SelecionarPorId(listaComprasId);
 
         if (lista == null)
             return Result.Fail("Lista de compras não encontrada.");
         
-        List<ItemLista> items = repositorioItemLista
+        List<ItemLista> itens = repositorioItemLista
             .SelecionarTodos()
             .Where(i => i.ListaCompras.Id == lista.Id)
             .ToList();
         
-        return Result.Ok(new DetalhesItemListaDto());
+        return Result.Ok(new DetalhesListaComprasDto(
+            lista.Id,
+            lista.Nome,
+            lista.DataCriacao,
+            lista.Status,
+            itens.Count,
+            itens.Sum(i => i.CalcularSubtotal())
+        ));
     }
+
+    private bool ExisteProdutoNaLista(Guid listaComprasId, Guid produtoId)
+    {
+        return repositorioItemLista
+            .SelecionarTodos()
+            .Any(i =>
+                i.ListaCompras.Id == listaComprasId &&
+                i.Produto.Id == produtoId
+            );
+    }
+
+    private Result<(ListaCompras Lista, Produto Produto)> SelecionarRelacionamentos(
+    Guid listaComprasId,
+    Guid produtoId
+    )
+    {
+        ListaCompras? lista = repositorioListaCompras.SelecionarPorId(listaComprasId);
+
+        if (lista == null)
+            return Result.Fail(new Error("Selecione uma lista válida.").WithMetadata("Campo", nameof(listaComprasId)));
+
+        Produto? produto = repositorioProduto.SelecionarPorId(produtoId);
+
+        if (produto == null)
+            return Result.Fail(new Error("Selecione um produto válido.").WithMetadata("Campo", nameof(produtoId)));
+
+        return Result.Ok((lista, produto));
+    }
+    private static Result Falha(string campo, string mensagem)
+    {
+        return Result.Fail(new Error(mensagem).WithMetadata("Campo", campo));
+    }
+
+    private static ListarItensListaDto MapearParaListarDto(ItemLista item)
+    {
+        return new ListarItensListaDto(
+            item.Id,
+            item.ListaCompras.Id,
+            item.ListaCompras.Nome,
+            item.Produto.Id,
+            item.Produto.Nome,
+            item.Produto.Categoria.Nome,
+            item.Produto.Categoria.Cor,
+            item.Produto.UnidadeMedida,
+            item.Produto.PrecoAproximado,
+            item.Quantidade,
+            item.CalcularSubtotal()
+        );
+    }
+    private static Result ValidarEntidade(ItemLista produto)
+    {
+        List<string> erros = produto.Validar();
+
+        if (erros.Count == 0)
+            return Result.Ok();
+
+        return Result.Fail(new Error(erros.First()).WithMetadata("Campo", string.Empty));
+    }  
 }
